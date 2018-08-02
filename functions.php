@@ -2,13 +2,8 @@
 /**
  * farmurban functions
 */
-
 $FF_STAFF_PAGES = array( '/the-staff-room/', '/zoom-room/', '/team-leader-instructions/', '/resources/', '/teacher-crib-sheets/' );
-$FF_STUDENT_PAGES = array( '/forums/forum/future-food-challenge-2018/', '/shop/', '/12-week-content/', '/future-food-challenge-2018/', '/how-to-use-this-website/' );
-$FF_PAGES = array_merge($FF_STAFF_PAGES, $FF_STUDENT_PAGES);
 $FF_STAFF_MENUS = array( 'The Staff Room', 'Teacher\'s Forum' );
-$FF_STUDENT_MENUS = array( 'Forum', 'Future Food Challenge 2018' );
-$FF_MENUS = array_merge($FF_STAFF_MENUS, $FF_STUDENT_MENUS);
 
 /* For error logging */
 if ( ! function_exists('write_log')) {
@@ -33,6 +28,8 @@ function my_theme_enqueue_styles() {
 }
 add_action( 'wp_enqueue_scripts', 'my_theme_enqueue_styles' );
 
+/* Redirect users to specific pages when they log in unless they have requested a page that
+   that are permitted to view */
 function fu_login_redirect($redirect_to, $redirect_url_specified, $user) {
     if ( ! is_wp_error( $user ) ) {
       $redirect_to = calculate_user_redirect($redirect_to, $user);
@@ -43,17 +40,11 @@ add_filter('login_redirect','fu_login_redirect', 10, 3);
 
 function calculate_user_redirect($redirect_to, $user) {
    /* Calculcate the redirect based on the user and requested page */
-    global $FF_PAGES;
-    global $FF_STUDENT_PAGES;
     if ( ! in_array('administrator',  $user->roles) ) {
         if ( user_is_teacher($user->ID) ) {
-            if ( ! in_array( $redirect_to, $FF_PAGES ) ) {
+            if ( rtrim($redirect_to, "/") === home_url() ) {
               $redirect_to = home_url( '/the-staff-room/' );
             }
-        } else {
-          if ( ! in_array( $redirect_to, $FF_STUDENT_PAGES ) ) {
-            $redirect_to = home_url( '/future-food-challenge-2018/' );
-          }
         }
     }
     return $redirect_to;
@@ -120,15 +111,6 @@ function page_in_array($page_array){
     return in_array( $path, $page_array );
 }
 
-function is_protected_page() {
-    global $FF_PAGES;
-    return ( ! is_user_logged_in() && ( bp_requires_login() || page_in_array( $FF_PAGES ) ) );
-}
-
-function bp_requires_login() {
-    return ( ( ! bp_is_blog_page() && ! bp_is_activation_page() && ! bp_is_register_page() ) || is_bbpress() );
-}
-
 function page_only_for_teachers() {
     global $FF_STAFF_PAGES;
     return ( ! user_is_teacher() && page_in_array( $FF_STAFF_PAGES ) );
@@ -144,22 +126,18 @@ function user_is_teacher( $user_id = null ) {
 
 function my_page_template_redirect()
 {
-    if ( page_only_for_teachers() || is_protected_page() )
+    if ( page_only_for_teachers() )
     {
         wp_redirect( home_url( '/wp-login.php?redirect_to=' . parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH) ) );
         exit();
     }
 }
-
 add_action( 'template_redirect', 'my_page_template_redirect' );
 
 function filter_nav_menu_items($menu){
     // https://wordpress.stackexchange.com/questions/233667/how-to-hide-an-item-from-a-menu-to-logged-out-users-without-a-plugin
-    global $FF_MENUS;
     global $FF_STAFF_MENUS;
     if ( in_array( $menu->title, $FF_STAFF_MENUS ) && ! user_is_teacher() ) {
-        $menu->_invalid = True;
-    } elseif ( in_array( $menu->title, $FF_MENUS ) && ! is_user_logged_in() ) {
         $menu->_invalid = True;
     }
     return $menu; //return the filtered object
