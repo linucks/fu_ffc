@@ -33,22 +33,6 @@ function my_theme_enqueue_styles() {
 }
 add_action( 'wp_enqueue_scripts', 'my_theme_enqueue_styles' );
 
-/* Google Analytics */
-function wpb_add_googleanalytics() {
-?>
-<!-- Global site tag (gtag.js) - Google Analytics -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=UA-114920515-1"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'UA-114920515-1');
-</script>
-<?php
-}
-add_action('wp_head', 'wpb_add_googleanalytics');
-
 function fu_login_redirect($redirect_to, $redirect_url_specified, $user) {
     if ( ! is_wp_error( $user ) ) {
       $redirect_to = calculate_user_redirect($redirect_to, $user);
@@ -79,7 +63,7 @@ function calculate_user_redirect($redirect_to, $user) {
 function my_login_logo() { ?>
     <style type="text/css">
         #login h1 a, .login h1 a {
-            background-image: url(<?php echo home_url( '/wp-content/uploads/2016/06/FarmUrbanLogoNew100x106.png' ); ?>);
+            background-image: url(<?php echo home_url( '/wp-content/uploads/2018/08/FarmUrbanLogoNew100x106.png' ); ?>);
 		height:106px;
 		width:100px;
 		background-size: 100px 106px;
@@ -158,15 +142,6 @@ function user_is_teacher( $user_id = null ) {
     return groups_is_user_member( $user_id, $group_id );
 }
 
-function user_is_ffc( $user_id = null ) {
-    if ($user_id === null) {
-        $user_id = bp_loggedin_user_id();
-    }
-    /* hard-coded for now */
-    $group_id = 2;
-    return groups_is_user_member( $user_id, $group_id );
-}
-
 function my_page_template_redirect()
 {
     if ( page_only_for_teachers() || is_protected_page() )
@@ -190,46 +165,3 @@ function filter_nav_menu_items($menu){
     return $menu; //return the filtered object
 }
 add_filter( 'wp_setup_nav_menu_item', 'filter_nav_menu_items', 1 );
-
-/**
- * Woocommerce code
- */
-remove_action( 'woocommerce_after_single_product_summary', 'woocommerce_output_related_products', 20 );
-
-/* https://stackoverflow.com/questions/46328364/hide-payment-method-based-on-product-type-in-woocommerce */
-add_filter('woocommerce_available_payment_gateways', 'conditional_payment_gateways', 10, 1);
-function conditional_payment_gateways( $available_gateways ) {
-
-    $ffc_cid = 39;
-    $prod_ffc = false;
-    foreach (WC()->cart->get_cart() as $cart_item_key => $cart_item ) {
-        $product = wc_get_product($cart_item['product_id']);
-        if (in_array($ffc_cid, $product->get_category_ids())) {
-             $prod_ffc = true;
-        }
-    }
-    // Remove Paypal (paypal) payment gateway for Future Food Challenge products
-    if($prod_ffc) 
-        unset($available_gateways['paypal']);
-    return $available_gateways;
-}
-
-/* Direct ffc users to different page */
-function wc_empty_cart_redirect_url( $wc_get_page_permalink ) {
-    if ( user_is_ffc() ) {
-        return home_url( '/future-food-challenge-2018/' );
-    } else {
-        return home_url( '/farm-urban-shop/' );
-    }
-}
-add_filter( 'woocommerce_return_to_shop_redirect', 'wc_empty_cart_redirect_url' );
-
-
-/* Display view cart url if not empty */
-function get_fu_view_cart() {
-    if ( WC()->cart->get_cart_contents_count() > 0 ) {
-        return "<p>Your cart contains items and can be viewed <a href=\"" . home_url( '/cart/' ) . "\">here</a>.</p>";
-    }
-}
-add_shortcode( 'fu_view_cart', 'get_fu_view_cart' );
-

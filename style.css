@@ -1,5 +1,5 @@
 /*
- Theme Name:   Farm Urban Spacious
+ Theme Name:   Future Food Challenge Spacious
  Theme URI:    http://www.farmurban.co.uk
  Description:  Farm Urban Theme based on Spacious
  Author:       Jens Thomas
@@ -9,22 +9,8 @@
  License:      GNU General Public License v2 or later
  License URI:  http://www.gnu.org/licenses/gpl-2.0.html
  Tags:         one-column, two-columns, right-sidebar, left-sidebar, flexible-header, custom-header, custom-background, custom-menu, custom-colors, sticky-post, threaded-comments, translation-ready, featured-images, theme-options, footer-widgets, blog, e-commerce, rtl-language-support
- Text Domain: farmurban_spacious
+ Text Domain: ffc_spacious
 */
-
-/* @import '/wp-content/plugins/bbpress/templates/default/css/bbpress.css?ver=2.5.14-6684'; */
-
-/* http://themegrill.com/support-forum/topic/removing-read-more-button-on-slider/ */
-#featured-slider .slider-read-more-button {
-    display: none;
-}
-
-/* Grey-out links if they are not currently available */
-.nolink a {
-   pointer-events: none;
-   cursor: default;
-   color: #D3D3D3;
-}
 
 /* Change the look of the site by using Dosis */
 body,
@@ -59,10 +45,3 @@ h1, h2, h3, h4, h5, h6, p, .small-menu li {
 #site-title a {
     color: #0D96A5;
 }
-
-/* Custom page styles */
-/* 
-.page-id-349 .related.products {
-    display: none;
-}
-*/
