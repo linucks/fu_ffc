@@ -16,6 +16,32 @@ if ( ! function_exists('write_log')) {
    }
 }
 
+/* General Utility Functions */
+function page_in_array($page_array){
+    //$path = parse_url(wp_get_referer(), PHP_URL_PATH);
+    $path = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+    return in_array( $path, $page_array );
+}
+
+function page_only_for_teachers() {
+    global $FF_STAFF_PAGES;
+    return ( ! user_is_teacher() && page_in_array( $FF_STAFF_PAGES ) );
+}
+
+function user_is_teacher( $user_id = null ) {
+    if ($user_id === null) {
+        $user_id = bp_loggedin_user_id();
+    }
+    $group_id = groups_get_id( 'teachers' );
+    return groups_is_user_member( $user_id, $group_id );
+}
+
+function is_base_url($url) {
+  $url_rtrim = rtrim($url, "/");
+  return ( $url_rtrim === home_url() || $url_rtrim === "" );
+}
+
+/* Theme */
 function my_theme_enqueue_styles() {
     $parent_style = 'spacious_style';
     wp_enqueue_style( $parent_style, get_template_directory_uri() . '/style.css' );
@@ -28,8 +54,7 @@ function my_theme_enqueue_styles() {
 }
 add_action( 'wp_enqueue_scripts', 'my_theme_enqueue_styles' );
 
-/* Redirect users to specific pages when they log in unless they have requested a page that
-   that are permitted to view */
+/* Redirect specific users to set pages when they log on if requried */
 function fu_login_redirect($redirect_to, $redirect_url_specified, $user) {
     if ( ! is_wp_error( $user ) ) {
       $redirect_to = calculate_user_redirect($redirect_to, $user);
@@ -41,14 +66,25 @@ add_filter('login_redirect','fu_login_redirect', 10, 3);
 function calculate_user_redirect($redirect_to, $user) {
    /* Calculcate the redirect based on the user and requested page */
     if ( ! in_array('administrator',  $user->roles) ) {
-        if ( user_is_teacher($user->ID) ) {
-            if ( rtrim($redirect_to, "/") === home_url() ) {
-              $redirect_to = home_url( '/the-staff-room/' );
-            }
+        if ( user_is_teacher($user->ID) &&  is_base_url($redirect_to) ) {
+            /* redirect to staff room if just logging in and not requesting a particular page */
+            $redirect_to = home_url( '/the-staff-room/' );
         }
     }
     return $redirect_to;
 }
+
+/* Ensure user is logged on */
+function my_page_template_redirect()
+{
+    if ( ! is_user_logged_in() || page_only_for_teachers() )
+    {
+        $redirect_to = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+        wp_safe_redirect( wp_login_url( $redirect_to ), 302);
+        exit();
+    }
+}
+add_action( 'template_redirect', 'my_page_template_redirect' );
 
 /* Style the Login Page */
 function my_login_logo() { ?>
@@ -103,36 +139,6 @@ function get_bp_compose() {
     return "<a href=\"" . bp_loggedin_user_domain() . bp_get_messages_slug() . "/compose\">compose</a>";
 }
 add_shortcode( 'bp_compose', 'get_bp_compose' );
-
-/* Buddypress stuff below */
-function page_in_array($page_array){
-    //$path = parse_url(wp_get_referer(), PHP_URL_PATH);
-    $path = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
-    return in_array( $path, $page_array );
-}
-
-function page_only_for_teachers() {
-    global $FF_STAFF_PAGES;
-    return ( ! user_is_teacher() && page_in_array( $FF_STAFF_PAGES ) );
-}
-
-function user_is_teacher( $user_id = null ) {
-    if ($user_id === null) {
-        $user_id = bp_loggedin_user_id();
-    }
-    $group_id = groups_get_id( 'teachers' );
-    return groups_is_user_member( $user_id, $group_id );
-}
-
-function my_page_template_redirect()
-{
-    if ( page_only_for_teachers() )
-    {
-        wp_redirect( home_url( '/wp-login.php?redirect_to=' . parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH) ) );
-        exit();
-    }
-}
-add_action( 'template_redirect', 'my_page_template_redirect' );
 
 function filter_nav_menu_items($menu){
     // https://wordpress.stackexchange.com/questions/233667/how-to-hide-an-item-from-a-menu-to-logged-out-users-without-a-plugin
