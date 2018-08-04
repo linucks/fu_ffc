@@ -45,3 +45,8 @@ h1, h2, h3, h4, h5, h6, p, .small-menu li {
 #site-title a {
     color: #0D96A5;
 }
+
+/* Hide copyright stuff in footer */
+.footer-socket-wrapper {
+    display: none;
+}
