@@ -149,3 +149,12 @@ function filter_nav_menu_items($menu){
     return $menu; //return the filtered object
 }
 add_filter( 'wp_setup_nav_menu_item', 'filter_nav_menu_items', 1 );
+
+/* Javascript fun */
+add_action( 'wp_enqueue_scripts', 'enqueue_my_script');
+function enqueue_my_script() {
+    $page_title = 'Signup Progress';
+    if ( is_page( $page_title ) ) {
+        wp_enqueue_script( 'your-script-handle', get_stylesheet_directory_uri() . '/js/scripts.js', array( 'jquery' ), '1.0', false );
+    }
+}
