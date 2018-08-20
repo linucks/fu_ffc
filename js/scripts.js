@@ -1,5 +1,5 @@
 // API key from the Developer Console
-var API_KEY = 'AIzaSyDSvTTHmnxH1h3i2EZUSWfQecEbpAHUk6A';
+var API_KEY = '';
 var SPREADSHEET_ID = '1WS7C8liq1PVucI0cCOLSBlZl-upf7ldZHHFG1PrBA90';
 
 var range;
