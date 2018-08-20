@@ -38,8 +38,13 @@ function getRange() {
 function processRange(response) {
     range = response.result;
     getDataList();
-    drawTable(); // Table first as need to get ids of links
-    drawMarkers();
+    drawTable();
+    printUser();
+}
+
+function printUser() {
+  var t = document.createTextNode("Hello " + MyScriptData.user_login + "!")
+  document.getElementById('user').appendChild(t);
 }
 
 function getDataList() {
