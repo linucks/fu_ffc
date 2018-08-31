@@ -142,6 +142,11 @@ function get_bp_compose() {
 }
 add_shortcode( 'bp_compose', 'get_bp_compose' );
 
+function get_user_login_name(){
+  return wp_get_current_user()->user_login;
+}
+add_shortcode( 'user_login_name',  get_user_login_name);
+
 add_shortcode( 'ffc_user_status_table', 'get_user_status_table' );
 
 
