@@ -1,15 +1,9 @@
 
 
 To get composer (for installing per-project PHP modules): https://getcomposer.org/download/
-php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" && \
-php -r "if (hash_file('SHA384', 'composer-setup.php') === '544e09ee996cdf60ece3804abc52599c22b1f40f4323403c44d44fdfdd586475ca9813a858088ffbc1f233e9b180f061') { echo 'Installer verified'; } else { echo 'Installer corrupt'; unlink('composer-setup.php'); } echo PHP_EOL;"
-
-Now install composer:
-php composer-setup.php --install-dir=. --filename=composer.phar
 
 Install dependencies into vendor directory (uses composes.json):
 php ./composer.phar install
-
 
 Install google google google api
 # https://stackoverflow.com/questions/39314833/google-api-client-refresh-token-must-be-passed-in-or-set-as-part-of-setaccessto
@@ -18,10 +12,17 @@ php ./composer.phar require google/apiclient:^2.0
 
 Get authorisation credentials from: https://console.developers.google.com
 
-Then run the script and go to the url to authenticate. It will then redirect to the url specificed in the authorisation credentials, with a url like:
+Select FutureFoodChallenge from dropdown in top LHS and then goto Credentials, select the download icon and save file as: credentials.json
+
+Then run the script:
+ffc.php
+
+and go to the url to authenticate. It will then redirect to the url specificed in the authorisation credentials, with a url like:
 http://ffc.farmurban.co.uk/?code=4%2FSwC_xQujFRSc_OXroHWt9nDf-kjO9tO08HKJkmgnMszInmI6RZRcotrHBIX-BRTAf4SooCk1d50WVgYkXd9HDSo
 
 The %2F is /, so the token is: 4/SwC_xQujFRSc_OXroHWt9nDf-kjO9tO08HKJkmgnMszInmI6RZRcotrHBIX-BRTAf4SooCk1d50WVgYkXd9HDSo
+
+4/TACItppjT_8m7GlQS9dd_0tgmE7eC0cStz351jAVS5fXH5rAWZxJXt-_beyfKJ_Rq4bTRtFXPxe9QEAO6liuRqI
 
 This is what is given to the script and gets stored in the token.json file.
 
