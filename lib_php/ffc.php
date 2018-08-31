@@ -1,10 +1,28 @@
 <?php
-// jmht need as running from command-line with no timezone setup
-date_default_timezone_set('Europe/London');
+
 require __DIR__ . '/vendor/autoload.php';
 
-if (php_sapi_name() != 'cli') {
-    throw new Exception('This application must be run on the command line.');
+function get_user_status_table(){
+  // Get the API client and construct the service object.
+  $client = getClient();
+  $service = new Google_Service_Sheets($client);
+
+  $spreadsheetId = '1Mw8KvNflKOQmm_bCor7goRdAlQBhGTvVE3Sb4ECtUuE';
+  // $range = 'OnboardingTasks!A2:E';
+  // $response = $service->spreadsheets_values->get($spreadsheetId, $range);
+  // $values = $response->getValues();
+
+  // Need to use batch get as spreadsheets_values->get ignores empty cells and so returns variable
+  // length arrays, which means it's impossible to work out which values are missing/empty
+  $params = array('ranges' => array('OnboardingTasks!A2:A', // names
+                  'OnboardingTasks!D2:D', // TEDx
+                  'OnboardingTasks!E2:E' // Year 9 workshop
+                  ));
+  $response = $service->spreadsheets_values->batchGet($spreadsheetId, $params);
+  $columns = $response->valueRanges;
+  $user_login = wp_get_current_user()->user_login;
+  // $user_login = 'c_houseman';
+  return make_table_html($user_login, $columns);
 }
 
 /**
@@ -16,11 +34,13 @@ function getClient()
     $client = new Google_Client();
     $client->setApplicationName('Google Sheets API PHP Quickstart');
     $client->setScopes(Google_Service_Sheets::SPREADSHEETS_READONLY);
-    $client->setAuthConfig('credentials.json');
+    // $client->setAuthConfig('credentials.json');
+    $client->setAuthConfig(get_stylesheet_directory() . '/lib_php/credentials.json');
     $client->setAccessType('offline');
 
     // Load previously authorized credentials from a file.
-    $credentialsPath = 'token.json';
+    $credentialsPath = get_stylesheet_directory() . '/lib_php/token.json';
+    // $credentialsPath = 'token.json';
     if (file_exists($credentialsPath)) {
         $accessToken = json_decode(file_get_contents($credentialsPath), true);
     } else {
@@ -49,34 +69,20 @@ function getClient()
 
     // Refresh the token if it's expired.
     if ($client->isAccessTokenExpired()) {
+        $oldAccessToken = $client->getAccessToken();
         $client->fetchAccessTokenWithRefreshToken($client->getRefreshToken());
-        file_put_contents($credentialsPath, json_encode($client->getAccessToken()));
+        $accessToken=$client->getAccessToken();
+        $accessToken['refresh_token'] = $oldAccessToken['refresh_token'];
+        file_put_contents($credentialsPath, json_encode($accessToken));
+        // https://stackoverflow.com/questions/39314833/google-api-client-refresh-token-must-be-passed-in-or-set-as-part-of-setaccessto
+        // $client->fetchAccessTokenWithRefreshToken($client->getRefreshToken());
+        // file_put_contents($credentialsPath, json_encode($client->getAccessToken()));
     }
     return $client;
 }
 
 
-// Get the API client and construct the service object.
-$client = getClient();
-$service = new Google_Service_Sheets($client);
-
-$spreadsheetId = '1Mw8KvNflKOQmm_bCor7goRdAlQBhGTvVE3Sb4ECtUuE';
-// $range = 'OnboardingTasks!A2:E';
-// $response = $service->spreadsheets_values->get($spreadsheetId, $range);
-// $values = $response->getValues();
-
-// Need to use batch get as spreadsheets_values->get ignores empty cells and so returns variable
-// length arrays, which means it's impossible to work out which values are missing/empty
-$params = array('ranges' => array('OnboardingTasks!A2:A', // names
-                                  'OnboardingTasks!D2:D', // TEDx
-                                  'OnboardingTasks!E2:E' // Year 9 workshop
-                                  ));
-$response = $service->spreadsheets_values->batchGet($spreadsheetId, $params);
-$columns = $response->valueRanges;
-
-print "GOT " . get_user_status_table('c_houseman', $columns) . "\n";
-
-function get_user_status_table($user_login, $columns){
+function make_table_html($user_login, $columns){
   if (count($columns) < 3){
     return "<p class=\"error\">Could not access table data.</p>\n";
   }
@@ -90,6 +96,7 @@ function get_user_status_table($user_login, $columns){
   }
 
   $thtml = "<table>\n";
+  $thtml .= "<tr><th>Activity</th><th>Status</th><th>Outcome</th></tr>\n";
   $thtml .= table_row_tedx($tedx[$uidx]);
   $thtml .= table_row_workshop9($workshop9[$uidx]);
   $thtml .= "</table>\n";

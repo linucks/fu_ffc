@@ -2,6 +2,8 @@
 /**
  * farmurban functions
 */
+include('lib_php/ffc.php');
+
 $FF_STAFF_PAGES = array( '/the-staff-room/', '/zoom-room/', '/team-leader-instructions/', '/resources/', '/teacher-crib-sheets/' );
 $FF_STAFF_MENUS = array( 'The Staff Room', 'Teacher\'s Forum' );
 
@@ -139,6 +141,9 @@ function get_bp_compose() {
     return "<a href=\"" . bp_loggedin_user_domain() . bp_get_messages_slug() . "/compose\">compose</a>";
 }
 add_shortcode( 'bp_compose', 'get_bp_compose' );
+
+add_shortcode( 'ffc_user_status_table', 'get_user_status_table' );
+
 
 function filter_nav_menu_items($menu){
     // https://wordpress.stackexchange.com/questions/233667/how-to-hide-an-item-from-a-menu-to-logged-out-users-without-a-plugin
