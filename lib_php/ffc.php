@@ -103,6 +103,17 @@ function get_user_index($user_login, $names){
 }
 
 
+function get_date_str($cell_data){
+  try {
+    $date = new DateTime($cell_data);
+    $date_str = $date->format('j F Y');
+  } catch(Exception $e) {
+    $date_str = $cell_data; // or $e->getMessage() ?
+  }
+  return $date_str;
+}
+
+
 function table_row_tedx($cell) {
   $row = "<tr><td>TEDx talk</td>";
   $row .= "<td>October – November 2019</td>";
@@ -111,7 +122,8 @@ function table_row_tedx($cell) {
     $row .= "<td><a href=\"http://www.google.co.uk\">Book your talk</a></td>";
   } else {
     $row .= "<td>Completed</td>";
-    $row .= "<td>$cell[0]</td>";
+    $date = get_date_str($cell[0]);
+    $row .= "<td>Your talks are on: $date</td>";
   }
   $row .= "</tr>\n";
   return $row;
@@ -126,7 +138,8 @@ function table_row_workshop9($cell) {
     $row .= "<td><a href=\"http://www.google.co.uk\">Book your talk</a></td>";
   } else {
     $row .= "<td>Completed</td>";
-    $row .= "<td>$cell[0]</td>";
+    $date = get_date_str($cell[0]);
+    $row .= "<td>Your workshops are on: $date</td>";
   }
   $row .= "</tr>\n";
   return $row;

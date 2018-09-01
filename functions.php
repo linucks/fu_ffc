@@ -160,19 +160,19 @@ function filter_nav_menu_items($menu){
 }
 add_filter( 'wp_setup_nav_menu_item', 'filter_nav_menu_items', 1 );
 
-/* Javascript fun */
-/*
-https://wordpress.stackexchange.com/questions/166355/is-there-a-javascript-api-how-to-access-public-and-private-data-in-js
-*/
-add_action( 'wp_enqueue_scripts', 'enqueue_my_script');
-function enqueue_my_script() {
-    $page_title = 'Signup Progress';
-    if ( is_page( $page_title ) ) {
-        wp_enqueue_script( 'your-script-handle', get_stylesheet_directory_uri() . '/js/scripts.js', array( 'jquery' ), '1.0', false );
-        $data = array(
-          'user_login'       => wp_get_current_user()->user_login
-        );
-        // First argument attaches the variable to a script so needs to match wp_enqueue_scripts
-        wp_localize_script( 'your-script-handle', 'MyScriptData', $data );
-    }
-}
+// /* Javascript fun */
+// /*
+// https://wordpress.stackexchange.com/questions/166355/is-there-a-javascript-api-how-to-access-public-and-private-data-in-js
+// */
+// add_action( 'wp_enqueue_scripts', 'enqueue_my_script');
+// function enqueue_my_script() {
+//     $page_title = 'Signup Progress';
+//     if ( is_page( $page_title ) ) {
+//         wp_enqueue_script( 'your-script-handle', get_stylesheet_directory_uri() . '/js/scripts.js', array( 'jquery' ), '1.0', false );
+//         $data = array(
+//           'user_login'       => wp_get_current_user()->user_login
+//         );
+//         // First argument attaches the variable to a script so needs to match wp_enqueue_scripts
+//         wp_localize_script( 'your-script-handle', 'MyScriptData', $data );
+//     }
+// }
