@@ -12,6 +12,19 @@
  Text Domain: ffc_spacious
 */
 
+/* Change layout to small sidebar for the menu */
+#primary {
+        float: left;
+        width: 85%
+}
+
+#secondary {
+        float: right;
+        width: 15%
+}
+
+.site-header .menu {display: none};
+
 /* Change the look of the site by using Dosis */
 body,
 button,
