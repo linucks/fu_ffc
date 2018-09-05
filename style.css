@@ -23,7 +23,7 @@
         width: 15%
 }
 
-.site-header .menu {display: none};
+.site-header #site-navigation {display: none};
 
 /* Change the look of the site by using Dosis */
 body,
@@ -72,3 +72,95 @@ h1, h2, h3, h4, h5, h6, p, .small-menu li {
 .ffc_task_incomplete {
     color: #FF0000;
 }
+
+
+/* 
+https://jsfiddle.net/linucks/b31x7kgh/91/
+https://stackoverflow.com/questions/13630229/can-i-have-an-onclick-effect-in-css
+
+Colours
+link green: #0FBE7C
+menu text: #666666
+menu darker text: #444444
+lighter grey: #EAEAEA
+darkest grey: #3A3A3A
+white: #FFFFFF
+*/
+
+/* Reset */
+
+.menu-main-menu-container,
+.menu-main-menu-container ul,
+.menu-main-menu-container li,
+.menu-main-menu-container a {
+  margin: 0;
+  padding: 0;
+  border: none;
+  outline: none;
+}
+
+.menu-main-menu-container li {
+  list-style: none;
+}
+
+/* Layout & Style */
+
+.menu-main-menu-container li>a {
+  display: block;
+  position: relative;
+  min-width: 110px;
+  padding: 0 10px 0 40px;
+  height: 32px;
+  background: #444444;
+  color: #0FBE7C;
+  font: bold 12px/32px Arial, sans-serif;
+  text-decoration: none;
+  text-shadow: 0px 1px 0px rgba(0,0,0, .35);
+}
+
+.menu-main-menu-container>li:hover>a,
+.menu-main-menu-container>li:target>a {
+  color: #3e5706;
+  text-shadow: 1px 1px 1px rgba(255, 255, 255, .2);
+  background: yellow;
+}
+
+/* Sub Menu */
+.sub-menu li a {
+  color: #0FBE7C;;
+  text-shadow: 1px 1px 0px rgba(255, 255, 255, .2);
+  background: #FFFFFF;
+  border-bottom: 1px solid #c9c9c9;
+}
+
+.sub-menu li:hover a {
+  background: #EAEAEA;
+}
+
+.sub-menu li:last-child a {
+  border: none;
+}
+
+/* Functionality */
+.menu-main-menu-container li>.sub-menu li {
+  height: 0;
+  overflow: hidden;
+  -webkit-transition: height .2s ease-in-out;
+  -moz-transition: height .2s ease-in-out;
+  -o-transition: height .2s ease-in-out;
+  -ms-transition: height .2s ease-in-out;
+  transition: height .2s ease-in-out;
+}
+
+
+/* When clicking outer div, make inner div visible
+... And hold by staying visible on hover */
+.menu-main-menu-container li:active .sub-menu li {
+  height: 33px;
+}
+
+.menu-main-menu-container li:hover .sub-menu li {
+/* .menu-main-menu-container .sub-menu li:hover { */
+  height: 33px;
+}
+
