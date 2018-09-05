@@ -20,7 +20,8 @@
 
 #secondary {
         float: right;
-        width: 15%
+        width: 15%;
+	padding: 0px 10px 0px 0px;
 }
 
 .site-header #site-navigation {display: none};
@@ -99,8 +100,16 @@ white: #FFFFFF
   outline: none;
 }
 
+/* needs resetting as overrides our declarations */
+#secondary .widget ul li {
+	line-height: 1;
+	border-bottom: 0px solid #EAEAEA;
+	padding: 0;
+}
+
 .menu-main-menu-container li {
   list-style: none;
+  padding: 0px;
 }
 
 /* Layout & Style */
@@ -111,12 +120,13 @@ white: #FFFFFF
   min-width: 110px;
   padding: 0 10px 0 40px;
   height: 32px;
-  background: #444444;
+  background: #F9F9F9;
   color: #0FBE7C;
   font: bold 12px/32px Arial, sans-serif;
   text-decoration: none;
   text-shadow: 0px 1px 0px rgba(0,0,0, .35);
 }
+/* #F9F9F9 */
 
 .menu-main-menu-container>li:hover>a,
 .menu-main-menu-container>li:target>a {
