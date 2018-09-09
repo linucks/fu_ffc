@@ -19,9 +19,8 @@
 }
 
 #secondary {
-        float: right;
         width: 15%;
-	padding: 0px 10px 0px 0px;
+	      padding: 0px 10px 0px 0px;
 }
 
 .site-header #site-navigation {display: none};
@@ -75,7 +74,7 @@ h1, h2, h3, h4, h5, h6, p, .small-menu li {
 }
 
 
-/* 
+/*
 https://jsfiddle.net/linucks/b31x7kgh/91/
 https://stackoverflow.com/questions/13630229/can-i-have-an-onclick-effect-in-css
 
@@ -122,7 +121,7 @@ white: #FFFFFF
   height: 32px;
   background: #F9F9F9;
   color: #0FBE7C;
-  font: bold 12px/32px Arial, sans-serif;
+  /* font: bold 12px/32px Arial, sans-serif; */
   text-decoration: none;
   text-shadow: 0px 1px 0px rgba(0,0,0, .35);
 }
@@ -174,3 +173,8 @@ white: #FFFFFF
   height: 33px;
 }
 
+/* Attempt to do responsive menus */
+@media screen and (max-width: 768px) {
+  #secondary {display: none;}
+  .site-header #site-navigation {display: block;}
+}
