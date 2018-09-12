@@ -65,6 +65,9 @@ h1, h2, h3, h4, h5, h6, p, .small-menu li {
 }
 
 
+.error {
+    color: #FF0000;
+}
 /* FFC table */
 .ffc_error {
     color: #FF0000;
@@ -89,10 +92,10 @@ white: #FFFFFF
 
 /* Reset */
 
-.menu-main-menu-container,
-.menu-main-menu-container ul,
-.menu-main-menu-container li,
-.menu-main-menu-container a {
+.widget_nav_menu,
+.widget_nav_menu ul,
+.widget_nav_menu li,
+.widget_nav_menu a {
   margin: 0;
   padding: 0;
   border: none;
@@ -106,14 +109,14 @@ white: #FFFFFF
 	padding: 0;
 }
 
-.menu-main-menu-container li {
+.widget_nav_menu li {
   list-style: none;
   padding: 0px;
 }
 
 /* Layout & Style */
 
-.menu-main-menu-container li>a {
+.widget_nav_menu li>a {
   display: block;
   position: relative;
   min-width: 110px;
@@ -127,8 +130,8 @@ white: #FFFFFF
 }
 /* #F9F9F9 */
 
-.menu-main-menu-container>li:hover>a,
-.menu-main-menu-container>li:target>a {
+.widget_nav_menu>li:hover>a,
+.widget_nav_menu>li:target>a {
   color: #3e5706;
   text-shadow: 1px 1px 1px rgba(255, 255, 255, .2);
   background: yellow;
@@ -151,7 +154,7 @@ white: #FFFFFF
 }
 
 /* Functionality */
-.menu-main-menu-container li>.sub-menu li {
+.widget_nav_menu li>.sub-menu li {
   height: 0;
   overflow: hidden;
   -webkit-transition: height .2s ease-in-out;
@@ -164,12 +167,12 @@ white: #FFFFFF
 
 /* When clicking outer div, make inner div visible
 ... And hold by staying visible on hover */
-.menu-main-menu-container li:active .sub-menu li {
+.widget_nav_menu li:active .sub-menu li {
   height: 33px;
 }
 
-.menu-main-menu-container li:hover .sub-menu li {
-/* .menu-main-menu-container .sub-menu li:hover { */
+.widget_nav_menu li:hover .sub-menu li {
+/* .widget_nav_menu .sub-menu li:hover { */
   height: 33px;
 }
 
