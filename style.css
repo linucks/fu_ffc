@@ -117,7 +117,7 @@ white: #FFFFFF
   display: block;
   position: relative;
   min-width: 110px;
-  padding: 0 10px 0 40px;
+  padding: 0 10px 0 0;
   height: 32px;
   background: #F9F9F9;
   color: #0FBE7C;

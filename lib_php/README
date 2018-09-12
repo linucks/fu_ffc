@@ -1,5 +1,3 @@
-
-
 To get composer (for installing per-project PHP modules): https://getcomposer.org/download/
 
 Install dependencies into vendor directory (uses composes.json):
@@ -15,7 +13,7 @@ Get authorisation credentials from: https://console.developers.google.com
 Select FutureFoodChallenge from dropdown in top LHS and then goto Credentials, select the download icon and save file as: credentials.json
 
 Then run the script:
-ffc.php
+php ffc_cli.php
 
 and go to the url to authenticate. It will then redirect to the url specificed in the authorisation credentials, with a url like:
 http://ffc.farmurban.co.uk/?code=4%2FSwC_xQujFRSc_OXroHWt9nDf-kjO9tO08HKJkmgnMszInmI6RZRcotrHBIX-BRTAf4SooCk1d50WVgYkXd9HDSo

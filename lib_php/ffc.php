@@ -20,16 +20,18 @@ function get_spreadsheet_columns(){
   $client = get_client();
   $service = new Google_Service_Sheets($client);
 
-  $spreadsheetId = '1Mw8KvNflKOQmm_bCor7goRdAlQBhGTvVE3Sb4ECtUuE';
+  //$spreadsheetId = '1Mw8KvNflKOQmm_bCor7goRdAlQBhGTvVE3Sb4ECtUuE';
+  $spreadsheetId = '1V1msTAoZN5oEaz9bPGQCuQmP-xXBxw7NmhNY8ty6tp4';
   // $range = 'OnboardingTasks!A2:E';
   // $response = $service->spreadsheets_values->get($spreadsheetId, $range);
   // $values = $response->getValues();
 
   // Need to use batch get as spreadsheets_values->get ignores empty cells and so returns variable
   // length arrays, which means it's impossible to work out which values are missing/empty
-  $params = array('ranges' => array('OnboardingTasks!A2:A', // names
-                  'OnboardingTasks!D2:D', // TEDx
-                  'OnboardingTasks!E2:E' // Year 9 workshop
+  $params = array('ranges' => array('Master_Tracker!B2:B', // names
+                                    'Master_Tracker!C2:C', // Registration
+                                    'Master_Tracker!E2:E', // TEDx
+                                    'Master_Tracker!F2:F' // Year 9 workshop
                   ));
   $response = $service->spreadsheets_values->batchGet($spreadsheetId, $params);
   $columns = $response->valueRanges;
@@ -73,8 +75,9 @@ function make_table_html($user_login, $columns){
     return "<p class=\"error\">Could not access table data.</p>\n";
   }
   $names = $columns[0];
-  $tedx = $columns[1];
-  $workshop9 = $columns[2];
+  $registration = $columns[1];
+  $tedx = $columns[2];
+  $workshop9 = $columns[3];
 
   $uidx = get_user_index($user_login, $names);
   if (is_null($uidx)) {
@@ -83,6 +86,7 @@ function make_table_html($user_login, $columns){
 
   $thtml = "<table>\n";
   $thtml .= "<tr><th>Activity</th><th>Details</th><th>Status</th><th>Action</th></tr>\n";
+  $thtml .= table_row_registration($registration[$uidx]);
   $thtml .= table_row_tedx($tedx[$uidx]);
   $thtml .= table_row_workshop9($workshop9[$uidx]);
   $thtml .= table_row_trainingday($workshop9[$uidx]);
@@ -114,12 +118,27 @@ function get_date_str($cell_data){
 }
 
 
+function table_row_registration($cell) {
+  $row = "<tr><td>Registration</td>";
+  $row .= "<td>Open now</td>";
+  if (empty($cell) || $cell[0] === '') {
+    $row .= "<td class=\"ffc_task_incomplete\">Incomplete</td>";
+    $row .= "<td><a href=\"https://docs.google.com/forms/d/e/1FAIpQLSfudNAO0VxTycCOHvFCrzuD7tNj6ykE44LF-BnulzDhmp5jcQ/viewform\" rel=\"noopener\" target=\"_blank\">Register here</a></td>";
+  } else {
+    $row .= "<td>Completed</td>";
+    $date = get_date_str($cell[0]);
+    $row .= "<td>Date registered: $date</td>";
+  }
+  $row .= "</tr>\n";
+  return $row;
+}
+
 function table_row_tedx($cell) {
   $row = "<tr><td>TEDx talk</td>";
   $row .= "<td>October – November 2019</td>";
   if (empty($cell) || $cell[0] === '') {
     $row .= "<td class=\"ffc_task_incomplete\">Incomplete</td>";
-    $row .= "<td><a href=\"http://www.google.co.uk\">Book your talk</a></td>";
+    $row .= "<td><a href=\"https://doodle.com/poll/cywsyshw3gefrqxc\" rel=\"noopener\" target=\"_blank\">Book your talk</a></td>";
   } else {
     $row .= "<td>Completed</td>";
     $date = get_date_str($cell[0]);
@@ -135,7 +154,7 @@ function table_row_workshop9($cell) {
   $row .= "<td>July 2019</td>";
   if (empty($cell) || $cell[0] === '') {
     $row .= "<td class=\"ffc_task_incomplete\">Incomplete</td>";
-    $row .= "<td><a href=\"http://www.google.co.uk\">Book your talk</a></td>";
+    $row .= "<td><a href=\"https://doodle.com/poll/96ycg55y64surd8v\" rel=\"noopener\" target=\"_blank\">Book your talk</a></td>";
   } else {
     $row .= "<td>Completed</td>";
     $date = get_date_str($cell[0]);
