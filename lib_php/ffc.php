@@ -135,7 +135,7 @@ function table_row_registration($cell) {
 
 function table_row_tedx($cell) {
   $row = "<tr><td>TEDx talk</td>";
-  $row .= "<td>October – November 2019</td>";
+  $row .= "<td>October – December 2019</td>";
   if (empty($cell) || $cell[0] === '') {
     $row .= "<td class=\"ffc_task_incomplete\">Incomplete</td>";
     $row .= "<td><a href=\"https://doodle.com/poll/cywsyshw3gefrqxc\" rel=\"noopener\" target=\"_blank\">Book your talk</a></td>";
@@ -150,7 +150,7 @@ function table_row_tedx($cell) {
 
 
 function table_row_workshop9($cell) {
-  $row = "<tr><td>Year 9 talk</td>";
+  $row = "<tr><td>Year 9 Aquaponics Workshops</td>";
   $row .= "<td>July 2019</td>";
   if (empty($cell) || $cell[0] === '') {
     $row .= "<td class=\"ffc_task_incomplete\">Incomplete</td>";
@@ -167,7 +167,7 @@ function table_row_workshop9($cell) {
 
 function table_row_trainingday($cell) {
   $row = "<tr><td>Teacher Training Day</td>";
-  $row .= "<td>16th January 2019</td>";
+  $row .= "<td>16 January 2019</td>";
   $row .= "<td>Ok</td>";
   $row .= "<td>N/A</td>";
   $row .= "</tr>\n";
@@ -177,7 +177,7 @@ function table_row_trainingday($cell) {
 
 function table_row_launchevent($cell) {
   $row = "<tr><td>Launch Event</td>";
-  $row .= "<td>6th February 2019</td>";
+  $row .= "<td>6 February 2019</td>";
   $row .= "<td>Ok</td>";
   $row .= "<td>N/A</td>";
   $row .= "</tr>\n";
@@ -187,7 +187,7 @@ function table_row_launchevent($cell) {
 
 function table_row_12weekstart($cell) {
   $row = "<tr><td>Start of 12 Week Programme</td>";
-  $row .= "<td>11th February 2019</td>";
+  $row .= "<td>11 February 2019</td>";
   $row .= "<td>Ok</td>";
   $row .= "<td>N/A</td>";
   $row .= "</tr>\n";
@@ -197,7 +197,7 @@ function table_row_12weekstart($cell) {
 
 function table_row_competition($cell) {
   $row = "<tr><td>Competition Event</td>";
-  $row .= "<td>27th June 2019</td>";
+  $row .= "<td>27 June 2019</td>";
   $row .= "<td>Ok</td>";
   $row .= "<td>N/A</td>";
   $row .= "</tr>\n";
