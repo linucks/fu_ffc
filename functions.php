@@ -70,7 +70,7 @@ function calculate_user_redirect($redirect_to, $user) {
     if ( ! in_array('administrator',  $user->roles) ) {
         if ( user_is_teacher($user->ID) &&  is_base_url($redirect_to) ) {
             /* redirect to staff room if just logging in and not requesting a particular page */
-            $redirect_to = home_url( '/the-staff-room/' );
+            $redirect_to = home_url();
         }
     }
     return $redirect_to;
@@ -159,6 +159,15 @@ function filter_nav_menu_items($menu){
     return $menu; //return the filtered object
 }
 add_filter( 'wp_setup_nav_menu_item', 'filter_nav_menu_items', 1 );
+
+add_filter( 'wp_nav_menu_items', 'wti_loginout_menu_link', 10, 2 );
+function wti_loginout_menu_link( $items, $args ) {
+    //if ($args->theme_location == 'primary') {
+    if (is_user_logged_in()) {
+        $items .= '<li class="right"><a href="'. wp_logout_url() .'">'. __("Log Out") .'</a></li>';
+        }
+   return $items;
+}
 
 // /* Javascript fun */
 // /*
