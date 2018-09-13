@@ -134,7 +134,7 @@ function table_row_registration($cell) {
 }
 
 function table_row_tedx($cell) {
-  $row = "<tr><td>TEDx talk</td>";
+  $row = "<tr><td>TEDx Talk</td>";
   $row .= "<td>October – December 2019</td>";
   if (empty($cell) || $cell[0] === '') {
     $row .= "<td class=\"ffc_task_incomplete\">Incomplete</td>";
