@@ -1,14 +1,14 @@
 #!/bin/bash
 
-# Backup the site into a single tar file
+# Backup the site into a single tar file that will be placed in this directory
 database=ffc1
 user=ffcuser
 password='3:&fTH34'
 
-wordpress_root=`(cd ../../..; pwd)`
+theme_dir=`pwd -P`
+wordpress_root=`(cd $theme_dir/../../..; pwd)`
 wpcontent=${wordpress_root}/wp-content
 
-theme_dir=`pwd`
 pushd $wordpress_root
 mysqldump -u${user} -p${password} ${database} > ${wpcontent}/${database}_dump.sql
 cp wp-config.php ${wpcontent}
