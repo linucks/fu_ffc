@@ -4,8 +4,8 @@
 */
 include('lib_php/ffc.php');
 
-$FF_STAFF_PAGES = array( '/the-staff-room/', '/zoom-room/', '/team-leader-instructions/', '/resources/', '/teacher-crib-sheets/' );
-$FF_STAFF_MENUS = array( 'The Staff Room', 'Teacher\'s Forum' );
+$FF_STAFF_PAGES = array( '/the-staff-room/', '/zoom-room/', '/team-leader-instructions/', '/resources/', '/teacher-crib-sheets/', '/overview/' );
+$FF_STAFF_MENUS = array( 'The Staff Room', 'Teacher\'s Forum', 'Teacher Dashboard' );
 
 /* For error logging */
 if ( ! function_exists('write_log')) {
