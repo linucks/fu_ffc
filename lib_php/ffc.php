@@ -28,10 +28,10 @@ function get_spreadsheet_columns(){
 
   // Need to use batch get as spreadsheets_values->get ignores empty cells and so returns variable
   // length arrays, which means it's impossible to work out which values are missing/empty
-  $params = array('ranges' => array('Master_Tracker!B2:B', // names
-                                    'Master_Tracker!C2:C', // Registration
-                                    'Master_Tracker!E2:E', // TEDx
-                                    'Master_Tracker!F2:F' // Year 9 workshop
+  $params = array('ranges' => array('Master_Tracker!C2:C', // names
+                                    'Master_Tracker!D2:D', // Registration
+                                    'Master_Tracker!F2:F', // TEDx
+                                    'Master_Tracker!G2:G' // Year 9 workshop
                   ));
   $response = $service->spreadsheets_values->batchGet($spreadsheetId, $params);
   $columns = $response->valueRanges;
