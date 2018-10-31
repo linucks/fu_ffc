@@ -48,6 +48,11 @@ h1, h2, h3, h4, h5, h6, p, .small-menu li {
     list-style: disc;
 }
 
+/* Shorten interal gap between lists within lists */
+.entry-content ul > ul {
+    margin-bottom: 5px;
+}
+
 /* Header Styling */
 .header-post-title-class {
     color: #0D96A5;
