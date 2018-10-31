@@ -4,8 +4,8 @@
 */
 include('lib_php/ffc.php');
 
-$FF_STAFF_PAGES = array( '/the-staff-room/', '/zoom-room/', '/team-leader-instructions/', '/resources/', '/teacher-crib-sheets/', '/overview/' );
-$FF_STAFF_MENUS = array( 'The Staff Room', 'Teacher\'s Forum', 'Teacher Dashboard' );
+$FF_STAFF_PAGES = array( '/staff-room/', '/zoom-room/', '/team-leader-instructions/', '/resources/', '/teacher-crib-sheets/', '/teacher-dashboard/' );
+$FF_STAFF_MENUS = array( 'Staff Room', 'Teacher\'s Forum', 'Teacher Dashboard' );
 
 /* For error logging */
 if ( ! function_exists('write_log')) {
@@ -70,7 +70,8 @@ function calculate_user_redirect($redirect_to, $user) {
     if ( ! in_array('administrator',  $user->roles) ) {
         if ( user_is_teacher($user->ID) &&  is_base_url($redirect_to) ) {
             /* redirect to staff room if just logging in and not requesting a particular page */
-            $redirect_to = home_url();
+		/* $redirect_to = home_url(); */
+            $redirect_to = '/teacher-dashboard/';
         }
     }
     return $redirect_to;
