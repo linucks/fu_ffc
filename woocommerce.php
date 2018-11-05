@@ -16,7 +16,7 @@ get_header(); ?>
 		</div><!-- #content -->
 	</div><!-- #primary -->
 
-        <!-- We need to force the left sidebar to display in all woocommerce pages -->
+        <!-- jmht  - need to force the left sidebar to display in all woocommerce pages -->
 	<?php //spacious_sidebar_select(); ?>
 	<?php get_sidebar('left'); ?>
 
