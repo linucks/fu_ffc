@@ -1,0 +1,138 @@
+<p>The data from your Produce Pod is displayed below. Click the update button to refresh the graphs and display the latest data.</p>
+    <div class="container">
+      <h2>Sensor Information</h2>
+      <div class="sub-container">
+        <table style="margin-top: 150px">
+        <tr><th>IP Address</th><th>Uptime (hours)</th><th>Sensors</th></tr>
+        <tr><td>50.148.123.452</td><td>72</td><td>Temperature | Humidity</td></tr>
+        </table>
+      </div>
+      <div class="sub-container">
+        <div id="map"></div>
+      </div>
+  </div>
+  <br style="clear: both"/>
+  <div class="container">
+    <h2>Sensor Data</h2>
+    <div class="graph-container">
+      <header>
+        <h3>Temperature</h3>
+      </header>
+      <div id="temp_chart" class="ct-chart ct-perfect-fourth" data-x-axis="Time (hours)" data-y-axis="Temperature (C)"></div>
+    </div>
+    <div class="graph-container">
+      <header>
+        <h3>Humidity</h3>
+      </header>
+      <div id="humid_chart" class="ct-chart ct-perfect-fourth" data-x-axis="Time (hours)" data-y-axis="Humidity (%)"></div>
+    </div>
+    <input id="refresh-button" type="submit" value="Update">
+    <br/>
+    <div>
+      <p>To download the data as a csv file, please click the download button:</p>
+      <form action="#">
+        <input type="radio" name="download" value="1week" checked>1 Week<br/>
+        <input type="radio" name="download" value="2week">2 Weeks<br/>
+        <input type="radio" name="download" value="1month">1 month<br/>
+        <br/>
+        <input type="submit" value="Submit">
+      </form>
+      <div>
+  </div>
+
+    <script>
+    /* OpenStreetMap Code */
+    function initMap() {
+      var latitude = 53.3946712;
+      var longitude = -2.9809599;
+      var map = L.map('map').setView([latitude, longitude], 13);
+
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+          attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+      }).addTo(map);
+
+      L.marker([latitude, longitude]).addTo(map)
+          .bindPopup('IP: 50.148.123.452')
+          .openPopup();
+    }
+    initMap();
+    /* Now graph data */
+    var len_graphs = 20;
+    var labels = Array.from(Array(len_graphs), (_,x) => x)
+
+    var data_temp = {
+      labels: labels,
+      series: [  Array.from({length: len_graphs}, () => Math.floor(Math.random() * 3) + 20) ]
+    };
+    var data_humid = {
+      labels: labels,
+      series: [  Array.from({length: len_graphs}, () => Math.floor(Math.random() * 3) + 30) ]
+    };
+
+    var options_temp = {
+      low: 10,
+      high: 30,
+      plugins: [
+          Chartist.plugins.ctAxisTitle({
+            axisX: {
+              axisTitle: 'Time (hours)',
+              axisClass: 'ct-axis-title',
+              offset: {
+                x: 0,
+                y: 35
+              },
+              textAnchor: 'middle'
+            },
+            axisY: {
+              axisTitle: 'Temperature (C)',
+              axisClass: 'ct-axis-title',
+              offset: {
+                x: 0,
+                y: 11
+              },
+              textAnchor: 'middle',
+              flipTitle: true
+            }
+          })
+        ]
+    };
+    var options_humidity = {
+      low: 0,
+      high: 100,
+      plugins: [
+          Chartist.plugins.ctAxisTitle({
+            axisX: {
+              axisTitle: 'Time (hours)',
+              axisClass: 'ct-axis-title',
+              offset: {
+                x: 0,
+                y: 35
+              },
+              textAnchor: 'middle'
+            },
+            axisY: {
+              axisTitle: 'Humidity (%)',
+              axisClass: 'ct-axis-title',
+              offset: {
+                x: 0,
+                y: 10
+              },
+              textAnchor: 'middle',
+              flipTitle: true
+            }
+          })
+        ]
+    };
+
+    var temp_chart = new Chartist.Line('#temp_chart', data_temp, options_temp);
+    var humid_chart = new Chartist.Line('#humid_chart', data_humid, options_humidity);
+
+    function updateChart() {
+      temp_chart.update({series: [Array.from({length: len_graphs}, () => Math.floor((Math.random() * 3) + 20))],
+                        labels: labels });
+      humid_chart.update({series: [Array.from({length: len_graphs}, () => Math.floor((Math.random() * 3) + 30))],
+                        labels: labels });
+      return;
+    }
+    document.getElementById("refresh-button").onclick = updateChart;
+    </script>

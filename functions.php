@@ -148,8 +148,8 @@ function get_user_login_name(){
 }
 add_shortcode( 'user_login_name',  get_user_login_name);
 
+/* code in lib_php/ffc.php */
 add_shortcode( 'ffc_user_status_table', 'get_user_status_table' );
-
 
 function filter_nav_menu_items($menu){
     // https://wordpress.stackexchange.com/questions/233667/how-to-hide-an-item-from-a-menu-to-logged-out-users-without-a-plugin
@@ -169,6 +169,25 @@ function wti_loginout_menu_link( $items, $args ) {
         }
    return $items;
 }
+
+function load_page_specific_scripts() {
+    global $post;
+    if( is_page() || is_single() )
+    {
+        switch($post->post_name) // post_name is the post slug which is more consistent for matching to here
+        {
+            case 'sensors':
+                wp_enqueue_style( 'sensors', get_stylesheet_directory_uri() . '/sensors.css');
+                wp_enqueue_style( 'chartist', "http://cdn.jsdelivr.net/chartist.js/latest/chartist.min.css" );
+                wp_enqueue_style( 'leaflet', "https://unpkg.com/leaflet@1.3.4/dist/leaflet.css" );
+                wp_enqueue_script( 'chartist', "http://cdn.jsdelivr.net/chartist.js/latest/chartist.min.js");
+                wp_enqueue_script( 'chartist-axis', "https://cdn.jsdelivr.net/npm/chartist-plugin-axistitle@0.0.4/dist/chartist-plugin-axistitle.min.js");
+                wp_enqueue_script( 'leaflet', "https://unpkg.com/leaflet@1.3.4/dist/leaflet.js");
+                break;
+        }
+    }
+}
+add_action('wp_enqueue_scripts', 'load_page_specific_scripts');
 
 // /* Javascript fun */
 // /*

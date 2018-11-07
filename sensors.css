@@ -1,0 +1,44 @@
+
+#map {
+  margin: auto;
+  height: 400px;
+  width: 400px;
+ }
+ .container {
+   width: auto;
+   display: inline-block;
+ }
+.container header {
+  text-align: center;
+}
+.container h2 {
+  text-align: center;
+}
+.sub-container {
+  display: block;
+  float: left;
+  padding: 10px;
+}
+.graph-container {
+  width: auto;
+  float: left;
+  border: 2px;
+  border-color: black;
+  border-style: groove;
+  padding: 10px;
+  margin: 10px;
+}
+#temp_chart {
+  width: 400px;
+  float: left;
+}
+#humid_chart {
+  width: 400px;
+  float: left;
+}
+
+#refresh-button {
+  display: block;
+  margin: auto;
+  clear: left;
+}
