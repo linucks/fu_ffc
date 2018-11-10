@@ -30,17 +30,18 @@
     <br/>
     <div>
       <p>To download the data as a csv file, please click the download button:</p>
-      <form action="#">
+      <form action="javascript:void(0);">
         <input type="radio" name="download" value="1week" checked>1 Week<br/>
         <input type="radio" name="download" value="2week">2 Weeks<br/>
         <input type="radio" name="download" value="1month">1 month<br/>
         <br/>
-        <input type="submit" value="Submit">
+        <input type="submit" value="Submit" onclick="confirm('Downloaded csv file.');">
       </form>
       <div>
   </div>
 
     <script>
+
     /* OpenStreetMap Code */
     function initMap() {
       var latitude = 53.3946712;
