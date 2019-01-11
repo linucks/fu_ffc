@@ -146,7 +146,7 @@ add_shortcode( 'bp_compose', 'get_bp_compose' );
 function get_user_login_name(){
   return wp_get_current_user()->user_login;
 }
-add_shortcode( 'user_login_name',  get_user_login_name);
+add_shortcode( 'user_login_name',  'get_user_login_name');
 
 /* code in lib_php/ffc.php */
 add_shortcode( 'ffc_user_status_table', 'get_user_status_table' );
@@ -188,6 +188,31 @@ function load_page_specific_scripts() {
     }
 }
 add_action('wp_enqueue_scripts', 'load_page_specific_scripts');
+
+function do_show_posts($atts = [])
+{
+    $a = shortcode_atts( array(
+  		'tags' => null // comma-separated list of tags
+  	), $atts );
+    if ($a['tags'] === null) {
+      $content = "<p class=\"error\">Please provide a list of comma-separated tags to show posts.</p>";
+    } else {
+        ob_start();
+        $query = new WP_Query( array( 'tag' => $a['tags'] ) );
+        if ( $query->have_posts() ) :
+                while ( $query->have_posts() ) : $query->the_post();
+                        $format = spacious_posts_listing_display_type_select();
+                        get_template_part( 'content', $format );
+                endwhile;
+        else :
+                get_template_part( 'no-results', 'none' );
+        endif;
+        wp_reset_query(); //reset the global variable related to post loop
+        $content =  ob_get_clean();
+    }
+    return $content;
+}
+add_shortcode('show_posts', 'do_show_posts');
 
 // /* Javascript fun */
 // /*
