@@ -81,6 +81,8 @@ h1, h2, h3, h4, h5, h6, p, .small-menu li {
     color: #FF0000;
 }
 
+/* Strange woocommerce Related products h2 bug */
+.related.products h2 {clear: left};
 
 /* Below is all for the LHS menu in left-sidebar layout */
 /*
