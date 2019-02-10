@@ -8,13 +8,15 @@ password='3:&fTH34'
 theme_dir=`pwd -P`
 wordpress_root=`(cd $theme_dir/../../..; pwd)`
 wpcontent=${wordpress_root}/wp-content
+dump_dir=$theme_dir
+
+mysqldump -u${user} -p${password} ${database} > ${dump_dir}/${database}_dump.sql
 
 pushd $wordpress_root
-mysqldump -u${user} -p${password} ${database} > ${wpcontent}/${database}_dump.sql
-cp wp-config.php ${wpcontent}
+cp wp-config.php ${dump_dir}
 tfile=wp-content.${database}.tar.gz
 tar -czf $tfile wp-content
-mv $tfile $theme_dir
+mv $tfile $dump_dir
 popd
 
 
