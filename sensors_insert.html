@@ -14,18 +14,40 @@
 }
 </style>
 
-<p>The data from your Produce Pod is displayed below.</p>
 <div id="temp_chart" class="ct-chart ct-perfect-fourth" data-x-axis="Time (hours)" data-y-axis="Temperature (C)"></div>
 <div id="light_chart" class="ct-chart ct-perfect-fourth" data-x-axis="Time (hours)" data-y-axis="Light"></div>
 <div id="log"></div>
 
 <script>
-  drawChart(temp_data, '#temp_chart');
-  drawChart(light_data, '#light_chart');
+  drawChart(temp_data, '#temp_chart', 'Temperature (C)');
+  drawChart(light_data, '#light_chart', 'Lumens');
 
-  function drawChart(data, chart_id) {
+  function drawChart(data, chart_id, yAxisTitle) {
 
     var chartist_options = {
+        plugins: [
+            Chartist.plugins.ctAxisTitle({
+              axisX: {
+                axisTitle: 'Day',
+                axisClass: 'ct-axis-title',
+                offset: {
+                  x: 0,
+                  y: 32
+                },
+                textAnchor: 'middle'
+              },
+              axisY: {
+                axisTitle: yAxisTitle,
+                axisClass: 'ct-axis-title',
+                offset: {
+                  x: 0,
+                  y: 11
+                },
+                textAnchor: 'middle',
+                flipTitle: true
+              }
+            })
+          ],
       axisX: {
         type: Chartist.FixedScaleAxis,
         divisor: 5,
