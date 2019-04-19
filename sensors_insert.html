@@ -1,0 +1,56 @@
+<style>
+#temp_chart {
+  width: 400px;
+  float: left;
+}
+#light_chart {
+  width: 400px;
+  float: left;
+}
+</style>
+
+<p>The data from your Produce Pod is displayed below.</p>
+<div id="temp_chart" class="ct-chart ct-perfect-fourth" data-x-axis="Time (hours)" data-y-axis="Temperature (C)"></div>
+<div id="light_chart" class="ct-chart ct-perfect-fourth" data-x-axis="Time (hours)" data-y-axis="Light"></div>
+<div id="log"></div>
+
+<script>
+
+  drawChart(temp_data, '#temp_chart');
+  drawChart(light_data, '#light_chart');
+
+  function drawChart(data, chart_id) {
+
+    var chartist_options = {
+      axisX: {
+        type: Chartist.FixedScaleAxis,
+        divisor: 5,
+        labelInterpolationFnc: function(value, x, y) {
+          return moment(value).format('MMM D');
+        }
+      }
+    };
+
+    var time_data = dataToDateSeries(data);
+    //document.getElementById('log').innerHTML =  'dataX = ' + JSON.stringify(time_data, undefined, 2);
+    var temp_chart = new Chartist.Line(chart_id, time_data, chartist_options);
+  }
+
+  function dataToDateSeries(data) {
+    var new_series = [{
+      name: 'ticks',
+      data: []
+    }];
+    for (i = 0; i < data['labels'].length; i++) {
+      // Need to multiply dates by 1000 to deal with difference between PHP and JS UTC timestamps
+      let ddate = new Date(data['labels'][i] * 1000);
+      new_series[0].data.push({
+        x: ddate,
+        y: data['series'][0][i]
+      });
+    };
+    data.series = new_series;
+    return data;
+  }
+
+</script>
