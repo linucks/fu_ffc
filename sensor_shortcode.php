@@ -28,17 +28,26 @@ function get_sensor_data($station, $sensor)
     return  json_encode($gdata);
 }
 
-function do_show_sensors()
+function do_show_sensors($atts = [])
 {
-  wp_enqueue_style( 'chartist', "http://cdn.jsdelivr.net/chartist.js/latest/chartist.min.css" );
-  wp_enqueue_style( 'leaflet', "https://unpkg.com/leaflet@1.3.4/dist/leaflet.css" );
-  wp_enqueue_script( 'moment', "https://cdn.jsdelivr.net/npm/moment@2.24.0/moment.min.js");
-  wp_enqueue_script( 'chartist', "http://cdn.jsdelivr.net/chartist.js/latest/chartist.min.js");
-  wp_enqueue_script( 'chartist-axis', "https://cdn.jsdelivr.net/npm/chartist-plugin-axistitle@0.0.4/dist/chartist-plugin-axistitle.min.js");
-  wp_enqueue_script( 'leaflet', "https://unpkg.com/leaflet@1.3.4/dist/leaflet.js");
+  $a = shortcode_atts( array(
+    'station' => null // comma-separated list of tags
+  ), $atts );
+
+  if ($a['station'] === null) {
+    return "<p class=\"error\">Please provide a station number.</p>";
+  };
+
+
+  // wp_enqueue_style( 'chartist', "http://cdn.jsdelivr.net/chartist.js/latest/chartist.min.css" );
+  // wp_enqueue_style( 'leaflet', "https://unpkg.com/leaflet@1.3.4/dist/leaflet.css" );
+  // wp_enqueue_script( 'moment', "https://cdn.jsdelivr.net/npm/moment@2.24.0/moment.min.js");
+  // wp_enqueue_script( 'chartist', "http://cdn.jsdelivr.net/chartist.js/latest/chartist.min.js");
+  // wp_enqueue_script( 'chartist-axis', "https://cdn.jsdelivr.net/npm/chartist-plugin-axistitle@0.0.4/dist/chartist-plugin-axistitle.min.js");
+  // wp_enqueue_script( 'leaflet', "https://unpkg.com/leaflet@1.3.4/dist/leaflet.js");
 
   // Add graphs after main content
-  $station = 2;
+  $station = $a['station'];
   $sensor = 'ambient_light_0';
   $light_data = get_sensor_data($station, $sensor);
   $sensor = 'humidity_temperature';
