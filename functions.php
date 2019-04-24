@@ -3,7 +3,7 @@
  * farmurban functions
 */
 include('lib_php/ffc.php');
-include('sensors_shortcode.php');
+include('lib_php/sensors_shortcode.php');
 
 $FF_STAFF_PAGES = array( '/weekly-content/', '/zoom-room/', '/team-leader-instructions/', '/resources/', '/teacher-crib-sheets/', '/teacher-dashboard/' );
 $FF_STAFF_MENUS = array( 'Weekly Content', 'Teachers Forum', 'Teacher Dashboard', 'Zoom Room', 'Resources' );
@@ -214,20 +214,3 @@ function do_show_posts($atts = [])
     return $content;
 }
 add_shortcode('show_posts', 'do_show_posts');
-
-// /* Javascript fun */
-// /*
-// https://wordpress.stackexchange.com/questions/166355/is-there-a-javascript-api-how-to-access-public-and-private-data-in-js
-// */
-// add_action( 'wp_enqueue_scripts', 'enqueue_my_script');
-// function enqueue_my_script() {
-//     $page_title = 'Signup Progress';
-//     if ( is_page( $page_title ) ) {
-//         wp_enqueue_script( 'your-script-handle', get_stylesheet_directory_uri() . '/js/scripts.js', array( 'jquery' ), '1.0', false );
-//         $data = array(
-//           'user_login'       => wp_get_current_user()->user_login
-//         );
-//         // First argument attaches the variable to a script so needs to match wp_enqueue_scripts
-//         wp_localize_script( 'your-script-handle', 'MyScriptData', $data );
-//     }
-// }

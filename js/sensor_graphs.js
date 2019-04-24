@@ -6,9 +6,9 @@ drawChart(chart_json.light_data, chart_json.right_station_id, 'Lumens');
 drawChart(chart_json.temp_data_control, chart_json.left_control_id, 'Temperature (C)');
 drawChart(chart_json.light_data_control, chart_json.right_control_id, 'Lumens');
 
-function drawChart(data, chart_id, yAxisTitle) {
+function drawChart(data, chartId, yAxisTitle, numDays=7) {
 
-  chart_id = '#' + chart_id;
+  chartId = '#' + chartId;
   var chartist_options = {
       plugins: [
           Chartist.plugins.ctAxisTitle({
@@ -35,7 +35,7 @@ function drawChart(data, chart_id, yAxisTitle) {
         ],
     axisX: {
       type: Chartist.FixedScaleAxis,
-      divisor: 7,
+      divisor: numDays,
       labelInterpolationFnc: function(value, x, y) {
         return moment(value).format('MMM D');
       }
@@ -45,10 +45,11 @@ function drawChart(data, chart_id, yAxisTitle) {
   var time_data = dataToDateSeries(data);
   // document.getElementById('log').innerHTML =  'dataX = ' + JSON.stringify(time_data, undefined, 2);
   // console.log("GOT " + JSON.stringify(time_data, undefined, 2));
-  var temp_chart = new Chartist.Line(chart_id, time_data, chartist_options);
+  var temp_chart = new Chartist.Line(chartId, time_data, chartist_options);
 }
 
 function dataToDateSeries(data) {
+  /* Not sure why the data needs to be reformatted - taken from Chartist online examples */
   var new_series = [{
     name: 'ticks',
     data: []
