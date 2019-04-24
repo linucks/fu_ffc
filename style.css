@@ -193,3 +193,13 @@ white: #FFFFFF
   #secondary {display: none;}
   .site-header #site-navigation {display: block;}
 }
+
+.left-chart {
+  width: 400px;
+  float: left;
+}
+
+.right-chart {
+  width: 400px;
+  float: right;
+}
