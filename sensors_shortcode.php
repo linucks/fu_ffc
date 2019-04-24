@@ -1,5 +1,16 @@
 <?php
 
+// styles need to be enqueue as they go in the header
+// wp_enqueue_style( 'sensors', get_stylesheet_directory_uri() . '/sensors.css');
+wp_enqueue_style( 'chartist', "http://cdn.jsdelivr.net/chartist.js/latest/chartist.min.css" );
+wp_enqueue_style( 'leaflet', "https://unpkg.com/leaflet@1.3.4/dist/leaflet.css" );
+// just register the styles
+wp_register_script( 'moment', 'https://cdn.jsdelivr.net/npm/moment@2.24.0/moment.min.js', array(), '1.0.0', true  );
+wp_register_script( 'chartist', "http://cdn.jsdelivr.net/chartist.js/latest/chartist.min.js", array(), '1.0.0', true );
+wp_register_script( 'chartist-axis', "https://cdn.jsdelivr.net/npm/chartist-plugin-axistitle@0.0.4/dist/chartist-plugin-axistitle.min.js", array(), '1.0.0', true );
+wp_register_script( 'leaflet', "https://unpkg.com/leaflet@1.3.4/dist/leaflet.js", array(), '1.0.0', true );
+wp_register_script( 'draw_graphs', get_stylesheet_directory_uri() . '/js/sensor_graphs.js', array(), '1.0.0', true );
+
 function get_sensor_data($station, $sensor)
 {
     global $wpdb;
@@ -8,9 +19,9 @@ function get_sensor_data($station, $sensor)
     $rows = $wpdb->get_results($query);
 
     // Define the table columns, i.e. what the x and y data actually are.
-    $gdata = array();
-    $gdata['labels'] = array();
-    $gdata['series'] = array();
+    $gdata = array(
+      'labels' => array(),
+      'series' => array() );
     $gdata['series'][] = array();
     $time_as_int = 0;
     $i=1;
@@ -25,7 +36,7 @@ function get_sensor_data($station, $sensor)
             $i++;
     }
     endforeach;
-    return  json_encode($gdata);
+    return $gdata;
 }
 
 function do_show_sensors($atts = [])
@@ -37,23 +48,52 @@ function do_show_sensors($atts = [])
   if ($a['station'] === null) {
     return "<p class=\"error\">Please provide a station number.</p>";
   };
-
-
+  // Need to have enqeue styles earlier as end up in header
   // wp_enqueue_style( 'chartist', "http://cdn.jsdelivr.net/chartist.js/latest/chartist.min.css" );
   // wp_enqueue_style( 'leaflet', "https://unpkg.com/leaflet@1.3.4/dist/leaflet.css" );
-  // wp_enqueue_script( 'moment', "https://cdn.jsdelivr.net/npm/moment@2.24.0/moment.min.js");
-  // wp_enqueue_script( 'chartist', "http://cdn.jsdelivr.net/chartist.js/latest/chartist.min.js");
-  // wp_enqueue_script( 'chartist-axis', "https://cdn.jsdelivr.net/npm/chartist-plugin-axistitle@0.0.4/dist/chartist-plugin-axistitle.min.js");
-  // wp_enqueue_script( 'leaflet', "https://unpkg.com/leaflet@1.3.4/dist/leaflet.js");
+  wp_enqueue_script( 'moment' );
+  wp_enqueue_script( 'chartist' );
+  wp_enqueue_script( 'chartist-axis' );
+  wp_enqueue_script( 'leaflet' );
 
-  // Add graphs after main content
   $station = $a['station'];
+  $control = 2;
   $sensor = 'ambient_light_0';
   $light_data = get_sensor_data($station, $sensor);
+  $light_data_control = get_sensor_data($control, $sensor);
   $sensor = 'humidity_temperature';
   $temp_data = get_sensor_data($station, $sensor);
-  $content = "<script>var light_data=$light_data;\nvar temp_data=$temp_data;</script>";
-  $content .= file_get_contents(get_stylesheet_directory() . '/sensors_insert.html');
+  $temp_data_control = get_sensor_data($control, $sensor);
+
+  $left_station_id = 'left_' . $station;
+  $right_station_id = 'right_' . $station;
+  $left_control_id = 'left_control';
+  $right_control_id = 'right_control';
+  $chart_data = array(
+    'temp_data' => $temp_data,
+    'light_data' => $light_data,
+    'temp_data_control' => $temp_data_control,
+    'light_data_control' => $light_data_control,
+    'left_station_id' => $left_station_id,
+    'right_station_id' => $right_station_id,
+    'left_control_id' => $left_control_id,
+    'right_control_id' => $right_control_id );
+
+  $chart_json = json_encode($chart_data, JSON_UNESCAPED_SLASHES);
+  wp_localize_script( 'draw_graphs', 'chart_json', $chart_json );
+  wp_enqueue_script( 'draw_graphs' );
+
+  $content = <<<EOT
+  <section>
+    <p>Here is the sensor data for your tower.</p>
+    <div id="$left_station_id"   class="ct-chart ct-perfect-fourth left-chart"></div>
+    <div id="$right_station_id" class="ct-chart ct-perfect-fourth right-chart"></div>
+    <hr style="clear: both;"/>
+    <p>Here is the sensor data for the control.</p>
+    <div id="$left_control_id"   class="ct-chart ct-perfect-fourth left-chart"></div>
+    <div id="$right_control_id" class="ct-chart ct-perfect-fourth right-chart"></div>
+  </section>
+EOT;
   return $content;
 }
 add_shortcode('show_sensors', 'do_show_sensors');
