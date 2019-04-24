@@ -3,7 +3,7 @@
  * farmurban functions
 */
 include('lib_php/ffc.php');
-include('sensor_shortcode.php');
+include('sensors_shortcode.php');
 
 $FF_STAFF_PAGES = array( '/weekly-content/', '/zoom-room/', '/team-leader-instructions/', '/resources/', '/teacher-crib-sheets/', '/teacher-dashboard/' );
 $FF_STAFF_MENUS = array( 'Weekly Content', 'Teachers Forum', 'Teacher Dashboard', 'Zoom Room', 'Resources' );
