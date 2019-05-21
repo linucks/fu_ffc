@@ -1,12 +1,13 @@
 /* chart_json set by wp_localize_script */
 
 chart_json = JSON.parse(chart_json);
+//console.log(JSON.stringify(chart_json.light_data, undefined, 2));
 drawChart(chart_json.temp_data, chart_json.left_station_id, 'Temperature (C)');
 drawChart(chart_json.light_data, chart_json.right_station_id, 'Lumens');
 drawChart(chart_json.temp_data_control, chart_json.left_control_id, 'Temperature (C)');
 drawChart(chart_json.light_data_control, chart_json.right_control_id, 'Lumens');
 
-function drawChart(data, chartId, yAxisTitle, numDays=7) {
+function drawChart(data, chartId, yAxisTitle, numDays=5) {
 
   chartId = '#' + chartId;
   var chartist_options = {
@@ -56,7 +57,8 @@ function dataToDateSeries(data) {
   }];
   for (i = 0; i < data['labels'].length; i++) {
     // Need to multiply dates by 1000 to deal with difference between PHP and JS UTC timestamps
-    let ddate = new Date(data['labels'][i] * 1000);
+    // Sensor dates are 4 days behind the actual dates so need to add 4 days - each day has 86400000 ms
+    let ddate = new Date((data['labels'][i] * 1000) + (86400000 * 4));
     new_series[0].data.push({
       x: ddate,
       y: data['series'][0][i]
