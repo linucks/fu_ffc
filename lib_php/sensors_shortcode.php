@@ -11,10 +11,16 @@ wp_register_script( 'chartist-axis', "https://cdn.jsdelivr.net/npm/chartist-plug
 wp_register_script( 'leaflet', "https://unpkg.com/leaflet@1.3.4/dist/leaflet.js", array(), '1.0.0', true );
 wp_register_script( 'draw_graphs', get_stylesheet_directory_uri() . '/js/sensor_graphs.js', array(), '1.0.0', true );
 
-function get_sensor_data($station, $sensor)
+function get_sensor_data($station, $sensor, $num_days=5)
 {
     global $wpdb;
-    $query_str = "SELECT * FROM farmurban.$sensor WHERE station=$station";
+
+    // sensor dates are 4 days behind the actual data
+    $end_date = "SUBDATE(NOW(), 4)";
+    $start_date = "SUBDATE($end_date, $num_days)";
+    $date_query = "time BETWEEN $start_date AND $end_date";
+
+    $query_str = "SELECT * FROM farmurban.$sensor WHERE station=$station AND $date_query";
     $query = $wpdb->prepare($query_str, 'foo');
     $rows = $wpdb->get_results($query);
 
@@ -42,7 +48,8 @@ function get_sensor_data($station, $sensor)
 function do_show_sensors($atts = [])
 {
   $a = shortcode_atts( array(
-    'station' => null
+    'station' => null,
+    'num_days' => null,
   ), $atts );
 
   if ($a['station'] === null) {
@@ -57,13 +64,17 @@ function do_show_sensors($atts = [])
   wp_enqueue_script( 'leaflet' );
 
   $station = $a['station'];
-  $control = 2;
+  $control = 3;
   $sensor = 'ambient_light_0';
-  $light_data = get_sensor_data($station, $sensor);
-  $light_data_control = get_sensor_data($control, $sensor);
+  //$light_data = get_sensor_data($station, $sensor);
+  //$light_data_control = get_sensor_data($control, $sensor);
+  $light_data = get_sensor_data($station, $sensor, $a['num_days']);
+  $light_data_control = get_sensor_data($control, $sensor, $a['num_days']);
   $sensor = 'humidity_temperature';
-  $temp_data = get_sensor_data($station, $sensor);
-  $temp_data_control = get_sensor_data($control, $sensor);
+  //$temp_data = get_sensor_data($station, $sensor);
+  //$temp_data_control = get_sensor_data($control, $sensor);
+  $temp_data = get_sensor_data($station, $sensor, $a['num_days']);
+  $temp_data_control = get_sensor_data($control, $sensor, $a['num_days']);
 
   $left_station_id = 'left_' . $station;
   $right_station_id = 'right_' . $station;
@@ -85,13 +96,13 @@ function do_show_sensors($atts = [])
 
   $content = <<<EOT
   <section>
-    <p>Here is the sensor data for your tower.</p>
-    <div id="$left_station_id"   class="ct-chart ct-perfect-fourth left-chart"></div>
-    <div id="$right_station_id" class="ct-chart ct-perfect-fourth right-chart"></div>
-    <hr style="clear: both;"/>
     <p>Here is the sensor data for the control.</p>
     <div id="$left_control_id"   class="ct-chart ct-perfect-fourth left-chart"></div>
     <div id="$right_control_id" class="ct-chart ct-perfect-fourth right-chart"></div>
+    <hr style="clear: both;"/>
+    <p>Here is the sensor data for your tower.</p>
+    <div id="$left_station_id"   class="ct-chart ct-perfect-fourth left-chart"></div>
+    <div id="$right_station_id" class="ct-chart ct-perfect-fourth right-chart"></div>
   </section>
 EOT;
   return $content;
